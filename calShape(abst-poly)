@@ -1,0 +1,217 @@
+<?php
+abstract class Shape
+{
+     abstract public function calculateArea(): float;
+     abstract public function calculatePerimeter() : float;
+     abstract public function getName() : string;
+}
+
+class Circle extends Shape
+{
+    private float $radius;
+    
+    public function __construct(float $radius)
+    {
+        $this->radius = $radius;
+    }
+    
+    public function calculateArea(): float
+    {
+        
+        return (22/7)*$this->radius*$this->radius;
+        
+    }
+    
+    public function calculatePerimeter(): float
+    {
+       
+        return 2*(22/7)*$this->radius;
+    }
+    
+    public function getName() : string 
+    {
+        return 'Circle';
+    }
+    
+}
+
+class Rectangle extends Shape
+{
+    private float $height;
+    private float $width;
+    
+    public function __construct(float $height , float $width) 
+    {
+        $this->height = $height;
+        $this->width = $width;
+    }
+    
+    public function calculateArea(): float
+    {
+        
+        return $this->height*$this->width;
+        
+    }
+    
+    public function calculatePerimeter(): float
+    {
+       
+        return 2*($this->height+$this->width);
+    }
+    
+    public function getName() : string 
+    {
+        return 'Rectangle';
+    }   
+}
+
+class Square extends Shape
+{
+    private float $length;
+    
+    public function __construct(float $length)
+    {
+        $this->length = $length;
+    }
+    
+    public function calculateArea(): float
+    {
+        return $this->length*$this->length;
+    }
+    
+    public function calculatePerimeter(): float
+    {
+        return 4*$this->length;
+    }
+    
+    public function getName() : string 
+    {
+        return 'Square';
+    }    
+}
+
+class ShapeCollection
+{
+    private array $shapes;
+    
+    public function __construct()
+    {
+        $this->shapes = [];
+    }
+    
+    public function addShape(Shape $shape) : void
+    {
+        $this->shapes[] = $shape;
+        echo "Shape added successfully !";
+    }
+    
+    public function getShapes() : array
+    {
+        return $this->shapes;
+    }
+    
+    public function ascendingShapesArea(): void
+    {
+        usort($this->shapes, function($a, $b) 
+        {
+            return $a->calculateArea() - $b->calculateArea();
+        });
+                
+        foreach($this->shapes as $shape)
+        {
+            echo $shape->getName()."- Area :".$shape->calculateArea()." Perimeter :".$shape->calculatePerimeter()."\n";
+        }        
+    }
+    
+    public function ascendingShapesPerimeter(): void
+    {
+        usort($this->shapes, function($a, $b) 
+        {
+            return $a->calculatePerimeter() - $b->calculatePerimeter();
+        });
+                
+        foreach($this->shapes as $shape)
+        {
+            echo $shape->getName()."- Perimeter :".$shape->calculatePerimeter()." Area :".$shape->calculateArea()."\n";
+        }
+    }
+}
+
+class CommandPrompt
+{   
+    private ShapeCollection $shapeCollection;
+    
+    public function __construct()
+    {
+        $this->shapeCollection = new ShapeCollection();
+    }
+    
+    public function showMessage(string $message) : void
+    {
+         echo $message;
+    }
+    
+    public function showMainMessage() : void
+    {
+        $this->showMessage("\nchoose an option : \n\n1. Add Shape \n2. Show Sorted Shapes By Area \n3. Show Sort shapes by perimeter \n4. Exit \n");
+    }
+    
+    public function getAnswer(string $question):string
+    {
+        return readline($question);
+    }
+    
+    public function startFlow() : void
+    {
+        $this->showMainMessage();
+        $ans = $this->getAnswer("");
+        
+        switch($ans)
+        {
+            case 1:
+                
+                $answer = $this->getAnswer("Enter an option  (circle / square / rectangle) :");
+                if($answer === 'circle')
+                {
+                    $radius= $this->getAnswer("enter radius: ");
+                    $circle = new Circle($radius);
+                    $this->shapeCollection->addShape($circle);
+                }else if($answer === 'square')
+                {
+                    $length = $this->getAnswer("enter length: ");
+                    $square = new Square($length);
+                    $this->shapeCollection->addShape($square);
+                   
+                }else if ($answer === 'rectangle')
+                {
+                    $height = $this->getAnswer("enter height :");
+                    $width = $this->getAnswer("enter width :");
+                    $rectangle = new Rectangle ($height , $width);
+                    $this->shapeCollection->addShape($rectangle);
+                }
+                break;
+           
+            case 2:
+                $this->shapeCollection->ascendingShapesArea();
+                break;
+            
+            case 3:
+                $this->shapeCollection->ascendingShapesPerimeter();
+                break;
+                
+            case 4:
+                break;
+                
+            default:
+                $this->showMessage("Unsupported Output....Try again !.\n");
+                break;
+                
+        }
+        $this->startFlow();
+    }
+}
+
+$CommandPrompt = new CommandPrompt();
+$CommandPrompt->startFlow();
+
+?>

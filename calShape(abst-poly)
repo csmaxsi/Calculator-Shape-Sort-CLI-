@@ -1,8 +1,9 @@
+
 <?php
 abstract class Shape
 {
-     abstract public function calculateArea(): float;
-     abstract public function calculatePerimeter() : float;
+     abstract public function getArea(): float;
+     abstract public function getPerimeter() : float;
      abstract public function getName() : string;
 }
 
@@ -18,20 +19,7 @@ class Circle extends Shape
         $this->area = (22/7)*$this->radius*$this->radius;
         $this->perimeter = 2*(22/7)*$this->radius;
     }
-    
-    public function calculateArea(): float
-    {
-        
-        return (22/7)*$this->radius*$this->radius;
-        
-    }
-    
-    public function calculatePerimeter(): float
-    {
-       
-        return 2*(22/7)*$this->radius;
-    }
-    
+
     public function getName() : string 
     {
         return 'Circle';
@@ -65,19 +53,6 @@ class Rectangle extends Shape
 
     }
     
-    public function calculateArea(): float
-    {
-        
-        return $this->height*$this->width;
-        
-    }
-    
-    public function calculatePerimeter(): float
-    {
-       
-        return 2*($this->height+$this->width);
-    }
-    
     public function getName() : string 
     {
         return 'Rectangle';
@@ -105,16 +80,6 @@ class Square extends Shape
         $this->length = $length;
         $this->area = $this->length*$this->length;
         $this->perimeter = 4*$this->length;
-    }
-    
-    public function calculateArea(): float
-    {
-        return $this->length*$this->length;
-    }
-    
-    public function calculatePerimeter(): float
-    {
-        return 4*$this->length;
     }
     
     public function getName() : string 

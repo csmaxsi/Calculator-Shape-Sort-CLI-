@@ -9,10 +9,14 @@ abstract class Shape
 class Circle extends Shape
 {
     private float $radius;
+    private float $area;
+    private float $perimeter;
     
     public function __construct(float $radius)
     {
         $this->radius = $radius;
+        $this->area = (22/7)*$this->radius*$this->radius;
+        $this->perimeter = 2*(22/7)*$this->radius;
     }
     
     public function calculateArea(): float
@@ -33,17 +37,32 @@ class Circle extends Shape
         return 'Circle';
     }
     
+    public function getArea(): float 
+    {
+        return $this->area;    
+    }
+    
+    public function getPerimeter(): float
+    {
+        return $this->perimeter;
+    } 
 }
 
 class Rectangle extends Shape
 {
     private float $height;
     private float $width;
+    private float $area;
+    private float $perimeter;
     
-    public function __construct(float $height , float $width) 
+    
+    public function __construct(float $height, float $width) 
     {
         $this->height = $height;
         $this->width = $width;
+        $this->area = $this->height*$this->width;
+        $this->perimeter = 2*($this->height+$this->width);
+
     }
     
     public function calculateArea(): float
@@ -62,16 +81,30 @@ class Rectangle extends Shape
     public function getName() : string 
     {
         return 'Rectangle';
-    }   
+    } 
+    
+    public function getArea(): float
+    {
+        return $this->area;
+    }
+    
+    public function getPerimeter(): float
+    {
+        return $this->perimeter;
+    }
 }
 
 class Square extends Shape
 {
     private float $length;
+    private float $area;
+    private float $perimeter;
     
     public function __construct(float $length)
     {
         $this->length = $length;
+        $this->area = $this->length*$this->length;
+        $this->perimeter = 4*$this->length;
     }
     
     public function calculateArea(): float
@@ -87,7 +120,17 @@ class Square extends Shape
     public function getName() : string 
     {
         return 'Square';
-    }    
+    }   
+    
+    public function getArea(): float 
+    {
+        return $this->area;    
+    }
+    
+    public function getPerimeter(): float
+    {
+        return $this->perimeter;
+    }
 }
 
 class ShapeCollection
@@ -110,29 +153,29 @@ class ShapeCollection
         return $this->shapes;
     }
     
-    public function ascendingShapesArea(): void
+    public function sortShapesByArea(): void
     {
         usort($this->shapes, function($a, $b) 
         {
-            return $a->calculateArea() - $b->calculateArea();
+            return $a->getArea() - $b->getArea();
         });
                 
         foreach($this->shapes as $shape)
         {
-            echo $shape->getName()."- Area :".$shape->calculateArea()." Perimeter :".$shape->calculatePerimeter()."\n";
+            echo $shape->getName()."- Area :".$shape->getArea()." Perimeter :".$shape->getPerimeter()."\n";
         }        
     }
     
-    public function ascendingShapesPerimeter(): void
+    public function sortShapesByPerimeter(): void
     {
         usort($this->shapes, function($a, $b) 
         {
-            return $a->calculatePerimeter() - $b->calculatePerimeter();
+            return $a->getPerimeter() - $b->getPerimeter();
         });
                 
         foreach($this->shapes as $shape)
         {
-            echo $shape->getName()."- Perimeter :".$shape->calculatePerimeter()." Area :".$shape->calculateArea()."\n";
+            echo $shape->getName()."- Perimeter :".$shape->getPerimeter()." Area :".$shape->getArea()."\n";
         }
     }
 }
@@ -192,11 +235,11 @@ class CommandPrompt
                 break;
            
             case 2:
-                $this->shapeCollection->ascendingShapesArea();
+                $this->shapeCollection->sortShapesByArea();
                 break;
             
             case 3:
-                $this->shapeCollection->ascendingShapesPerimeter();
+                $this->shapeCollection->sortShapesByPerimeter();
                 break;
                 
             case 4:
